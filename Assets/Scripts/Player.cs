@@ -7,10 +7,11 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.5f;
-
     [SerializeField]
     private GameObject _bulletPrefab;
-
+    [SerializeField]
+    private float _fireRate = 0.5f;
+    private float _canFire = -0.1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,15 +24,12 @@ public class Player : MonoBehaviour
     {
         CalculateMovement();
 
-        // If I hit the space key
-        // spawn the gameobject
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+            FireBullet();
         }
-    }
 
+    }
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -51,5 +49,12 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(9.4f, transform.position.y, 0);
         }
+    }
+
+    void FireBullet()
+    {
+        _canFire = Time.time + _fireRate;
+        Vector3 bulletPosition = new Vector3(transform.position.x, transform.position.y + 0.7f, 0);
+        Instantiate(_bulletPrefab, bulletPosition, Quaternion.identity);
     }
 }

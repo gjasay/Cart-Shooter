@@ -248,6 +248,7 @@ MonoBehaviour:
   _speed: 3.5
   _bulletPrefab: {fileID: 4147951393287104955, guid: 9d8ae1fe275f80642ab42469ecab09d1,
     type: 3}
+  _fireRate: 0.5
 --- !u!65 &474949655
 BoxCollider:
   m_ObjectHideFlags: 0
