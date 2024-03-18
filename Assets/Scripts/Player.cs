@@ -12,8 +12,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _fireRate = 0.5f;
     private float _canFire = -0.1f;
-
-    public int playerHealth = 100;
+    [SerializeField]
+    private int _lives = 3;
+    [SerializeField]
+    private int _health = 100;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +29,7 @@ public class Player : MonoBehaviour
     {
         CalculateMovement();
 
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
         {
             FireBullet();
         }
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour
         transform.Translate(_speed * Time.deltaTime * new Vector3(horizontalInput, verticalInput, 0));
 
         // Restricts bound on Y Axis
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.5f, 0));
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 0));
 
         // Wrapping on the X axis
         if (transform.position.x > 9.4f)
@@ -61,17 +63,22 @@ public class Player : MonoBehaviour
         Instantiate(_bulletPrefab, bulletPosition, Quaternion.identity);
     }
 
-    void DamagePlayer()
+    public void Damage()
     {
-        playerHealth -= 10;
-    }
+        _health -= 25;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Enemy")
+        if (_health <= 0)
         {
-            DamagePlayer();
-            Debug.Log(playerHealth);
+            _health = 0;
+            _lives--;
+            if (_lives <= 0)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                _health = 100;
+            }
         }
     }
 }
