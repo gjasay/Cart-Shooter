@@ -5,7 +5,9 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _enemy; 
+    private GameObject _enemyPrefab;
+    [SerializeField]
+    private GameObject _enemyContainer;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +28,8 @@ public class SpawnManager : MonoBehaviour
     {
         while (true)
         {
-            Instantiate(_enemy, new Vector3(Random.Range(-8.4f, 8.4f), 5f, 0f), Quaternion.identity);
+            GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8.4f, 8.4f), 5f, 0f), Quaternion.identity);
+            newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(5.0f);
         }
     }
