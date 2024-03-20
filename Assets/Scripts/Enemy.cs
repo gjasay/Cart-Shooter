@@ -10,17 +10,12 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //move down at 4 meters per second
-
-        //if bottom of screen
-        //respawn at top with a new random x position
-
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
         if (transform.position.y  < -5)
@@ -30,12 +25,8 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        // if other is player
-        // damage player
-        // self destruct
-
         if (other.tag == "Player")
         {
             Player player = other.transform.GetComponent<Player>();
@@ -47,11 +38,6 @@ public class Enemy : MonoBehaviour
 
             Destroy(this.gameObject);
         }
-
-        // if other is laser
-        // destroy laser
-        // self destruct
-
         else if (other.tag == "Bullet")
         {
             Destroy(other.gameObject);

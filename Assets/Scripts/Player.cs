@@ -17,11 +17,19 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _health = 100;
 
+    private SpawnManager _spawnManager;
+
     // Start is called before the first frame update
     void Start()
     {
         // Our starting position         x, y, z
         transform.position = new Vector3(0, -2, 0);
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+
+        if (_spawnManager == null )
+        {
+            Debug.LogError("The Spawn Manager is NULL");
+        }
     }
 
     // Update is called once per frame
@@ -59,7 +67,7 @@ public class Player : MonoBehaviour
     void FireBullet()
     {
         _canFire = Time.time + _fireRate;
-        Vector3 bulletPosition = new Vector3(transform.position.x, transform.position.y + 0.7f, 0);
+        Vector3 bulletPosition = new Vector3(transform.position.x, transform.position.y + 1.05f, 0);
         Instantiate(_bulletPrefab, bulletPosition, Quaternion.identity);
     }
 
@@ -73,6 +81,7 @@ public class Player : MonoBehaviour
             _lives--;
             if (_lives <= 0)
             {
+                _spawnManager.onPlayerDeath();
                 Destroy(gameObject);
             }
             else
