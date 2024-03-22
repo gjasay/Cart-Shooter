@@ -10,20 +10,30 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _bulletPrefab;
     [SerializeField]
-    private float _fireRate = 0.5f;
+    private GameObject _tripleShotPrefab;
+    [SerializeField]
+    private float _defaultFireRate = 0.15f;
+    [SerializeField]
+    private float _tripleShotFireRate = 0.5f;
     private float _canFire = -0.1f;
     [SerializeField]
     private int _lives = 3;
     [SerializeField]
     private int _health = 100;
+    [SerializeField]
+    private float _bulletOffset = 1.5f;
+    [SerializeField]
+    private bool _isTripleShotActive = false;
+    [SerializeField]
+    private float _tripleShotDuration = 5.0f;
 
     private SpawnManager _spawnManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Our starting position         x, y, z
-        transform.position = new Vector3(0, -2, 0);
+        transform.position = new Vector3(0, 0, 0);
+
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
 
         if (_spawnManager == null )
@@ -51,7 +61,7 @@ public class Player : MonoBehaviour
         transform.Translate(_speed * Time.deltaTime * new Vector3(horizontalInput, verticalInput, 0));
 
         // Restricts bound on Y Axis
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 0));
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 4.5f), 0);
 
         // Wrapping on the X axis
         if (transform.position.x > 9.4f)
@@ -66,9 +76,18 @@ public class Player : MonoBehaviour
 
     void FireBullet()
     {
-        _canFire = Time.time + _fireRate;
-        Vector3 bulletPosition = new Vector3(transform.position.x, transform.position.y + 1.05f, 0);
-        Instantiate(_bulletPrefab, bulletPosition, Quaternion.identity);
+        _canFire = Time.time + (_isTripleShotActive ? _tripleShotFireRate : _defaultFireRate);
+
+        Vector3 bulletPosition = new Vector3(transform.position.x, transform.position.y + _bulletOffset, 0);
+
+        if (_isTripleShotActive)
+        {
+            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(_bulletPrefab, bulletPosition, Quaternion.identity);
+        }
     }
 
     public void Damage()
@@ -89,5 +108,18 @@ public class Player : MonoBehaviour
                 _health = 100;
             }
         }
+    }
+
+    IEnumerator TripleShotRoutine()
+    {
+            Debug.Log("Triple Shot Activated!");
+            _isTripleShotActive = true;
+            yield return new WaitForSeconds(_tripleShotDuration);
+            _isTripleShotActive = false;
+    }
+
+    public void ActivateTripleShot()
+    {
+        StartCoroutine(TripleShotRoutine());
     }
 }

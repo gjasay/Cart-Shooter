@@ -23,15 +23,11 @@ public class SpawnManager : MonoBehaviour
         
     }
 
-    //spawn game objects every five seconds
-    //create a coroutine of type IEnumerator -- Yield Events
-    //while (infinite) loop
-    //always create infinite loops inside of coroutines
     IEnumerator SpawnRoutine()
     {
         while (_stopSpawning == false)
         {
-            GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8.4f, 8.4f), 5f, 0f), Quaternion.identity);
+            GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(5.0f);
         }
