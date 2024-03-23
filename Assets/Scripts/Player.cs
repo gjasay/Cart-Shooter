@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
@@ -112,7 +113,10 @@ public class Player : MonoBehaviour
 
     IEnumerator TripleShotRoutine()
     {
-            Debug.Log("Triple Shot Activated!");
+            if (_isTripleShotActive)
+            {
+            yield return new WaitUntil(() => !_isTripleShotActive);
+            }
             _isTripleShotActive = true;
             yield return new WaitForSeconds(_tripleShotDuration);
             _isTripleShotActive = false;
