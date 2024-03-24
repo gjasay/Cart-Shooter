@@ -56,17 +56,17 @@ public class Powerup : MonoBehaviour
                         }
 
                         break;
-                    case 2: 
-                        Debug.Log("Shields Activated!");
+                    case 2:
+                        player.ActivateShield();
                         break;
                     default:
-                        Debug.Log("Invalid Powerup ID");
+                        Debug.LogError("Invalid Powerup ID");
                         break;
                 }
             }
             else
             {
-                Debug.Log("Player Component is NULL");
+                Debug.LogError("Player Component is null");
             }
 
             Destroy(this.gameObject);

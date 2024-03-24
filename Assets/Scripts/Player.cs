@@ -29,9 +29,14 @@ public class Player : MonoBehaviour
     private float _tripleShotDuration = 5.0f;
     [SerializeField]
     private float _speedBoostDuration = 5.0f;
+    [SerializeField]
+    private float _shieldDuration = 5.0f;
+    [SerializeField]
+    private GameObject _shieldVisualizer;
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
+    private bool _isShieldActive = false;
     private SpawnManager _spawnManager;
 
     // Start is called before the first frame update
@@ -43,7 +48,7 @@ public class Player : MonoBehaviour
 
         if (_spawnManager == null )
         {
-            Debug.LogError("The Spawn Manager is NULL");
+            Debug.LogError("The Spawn Manager is null");
         }
     }
 
@@ -97,21 +102,34 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        _health -= 25;
-
-        if (_health <= 0)
+        if (!_isShieldActive)
         {
-            _health = 0;
-            _lives--;
-            if (_lives <= 0)
+            _health -= 25;
+
+            if (_health <= 0)
             {
-                _spawnManager.onPlayerDeath();
-                Destroy(gameObject);
+                _health = 0;
+                _lives--;
+                if (_lives <= 0)
+                {
+                    _spawnManager.onPlayerDeath();
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    _health = 100;
+                }
             }
-            else
+        } else
+        {
+            _isShieldActive = false;
+
+            if (_shieldVisualizer != null)
             {
-                _health = 100;
+                _shieldVisualizer.SetActive(false);
             }
+
+            return;
         }
     }
 
@@ -139,5 +157,14 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(speedBoostDuration);
         _isSpeedBoostActive = false;
 
+    }
+
+    public void ActivateShield()
+    {
+        _isShieldActive = true;
+        if (_shieldVisualizer != null)
+        {
+            _shieldVisualizer.SetActive(true);
+        }
     }
 }
