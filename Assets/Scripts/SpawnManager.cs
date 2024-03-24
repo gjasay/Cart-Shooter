@@ -9,7 +9,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
-    private GameObject _tripleshotPrefab;
+    private GameObject[] _powerups;
     [SerializeField]
     private GameObject _powerupContainer;
     [SerializeField]
@@ -23,7 +23,7 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnTripleshotRoutine());
+        StartCoroutine(SpawnPowerupRoutine());
     }
 
     // Update is called once per frame
@@ -34,7 +34,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemyRoutine()
     {
-        while (_stopSpawning == false)
+        while (!_stopSpawning)
         {
             GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
@@ -42,11 +42,12 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnTripleshotRoutine()
+    IEnumerator SpawnPowerupRoutine()
     {
-        while (_stopSpawning == false)
+        while (!_stopSpawning)
         {
-            GameObject newPowerup = Instantiate(_tripleshotPrefab, new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
+            int randomPowerup = Random.Range(0, 2);
+            GameObject newPowerup = Instantiate(_powerups[randomPowerup], new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
             newPowerup.transform.parent = _powerupContainer.transform;
             yield return new WaitForSeconds(Random.Range(_minWaitForPowerup, _maxWaitForPowerup));
         }

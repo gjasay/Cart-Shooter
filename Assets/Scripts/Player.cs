@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.5f;
     [SerializeField]
+    private float _speedMultiplier = 2f;
+    [SerializeField]
     private GameObject _bulletPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
@@ -24,10 +26,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _bulletOffset = 1.5f;
     [SerializeField]
-    private bool _isTripleShotActive = false;
-    [SerializeField]
     private float _tripleShotDuration = 5.0f;
+    [SerializeField]
+    private float _speedBoostDuration = 5.0f;
 
+    private bool _isTripleShotActive = false;
+    private bool _isSpeedBoostActive = false;
     private SpawnManager _spawnManager;
 
     // Start is called before the first frame update
@@ -59,7 +63,7 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        transform.Translate(_speed * Time.deltaTime * new Vector3(horizontalInput, verticalInput, 0));
+        transform.Translate((_isSpeedBoostActive ? _speedMultiplier * _speed : _speed) * Time.deltaTime * new Vector3(horizontalInput, verticalInput, 0));
 
         // Restricts bound on Y Axis
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 4.5f), 0);
@@ -111,19 +115,29 @@ public class Player : MonoBehaviour
         }
     }
 
-    IEnumerator TripleShotRoutine()
-    {
-            if (_isTripleShotActive)
-            {
+    public IEnumerator TripleShotRoutine(float tripleShotDuration)
+    {    
+        if (_isTripleShotActive)
+        {
             yield return new WaitUntil(() => !_isTripleShotActive);
-            }
-            _isTripleShotActive = true;
-            yield return new WaitForSeconds(_tripleShotDuration);
-            _isTripleShotActive = false;
+        }
+
+        _isTripleShotActive = true;
+        yield return new WaitForSeconds(tripleShotDuration);
+        _isTripleShotActive = false;
+
     }
 
-    public void ActivateTripleShot()
+    public IEnumerator SpeedBoostRoutine(float speedBoostDuration)
     {
-        StartCoroutine(TripleShotRoutine());
+        if (_isSpeedBoostActive)
+        {
+            yield return new WaitUntil(() => !_isSpeedBoostActive);
+        }
+
+        _isSpeedBoostActive = true;
+        yield return new WaitForSeconds(speedBoostDuration);
+        _isSpeedBoostActive = false;
+
     }
 }

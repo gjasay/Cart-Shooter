@@ -5,7 +5,15 @@ using UnityEngine;
 public class Powerup : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 4.0f;
+    private float _speed = 4.0f; //IDs for powerups: TripleShot: 0, Speed Boost: 1, Shields: 2
+    [SerializeField]
+    private float _tripleShotDuration = 5.0f;
+    [SerializeField]
+    private float _speedBoostDuration = 5.0f;
+    [SerializeField]
+    private float _shieldDuration = 5.0f;
+    [SerializeField]
+    private int _powerupID;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +39,30 @@ public class Powerup : MonoBehaviour
 
             if (player != null)
             {
-                player.ActivateTripleShot();
+                switch (_powerupID)
+                {
+                    case 0:
+                        player.StartCoroutine(player.TripleShotRoutine(_tripleShotDuration));
+                        break;
+                    case 1:
+                        player.StartCoroutine(player.SpeedBoostRoutine(_speedBoostDuration));
+
+                        //Finds both background objects and starts the Coroutine for both
+                        GameObject[] backgrounds = GameObject.FindGameObjectsWithTag("Background");
+
+                        foreach (GameObject background in backgrounds )
+                        {
+                            background.GetComponent<Background>().ActivateSpeedBoost(_speedBoostDuration);
+                        }
+
+                        break;
+                    case 2: 
+                        Debug.Log("Shields Activated!");
+                        break;
+                    default:
+                        Debug.Log("Invalid Powerup ID");
+                        break;
+                }
             }
             else
             {
