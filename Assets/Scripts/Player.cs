@@ -21,17 +21,9 @@ public class Player : MonoBehaviour
     private float _tripleShotFireRate = 0.5f;
     private float _canFire = -0.1f;
     [SerializeField]
-    private int _lives = 3;
-    [SerializeField]
     private int _health = 100;
     [SerializeField]
     private float _bulletOffset = 1.5f;
-    [SerializeField]
-    private float _tripleShotDuration = 5.0f;
-    [SerializeField]
-    private float _speedBoostDuration = 5.0f;
-    [SerializeField]
-    private float _shieldDuration = 5.0f;
     [SerializeField]
     private GameObject _shieldVisualizer;
     [SerializeField]
@@ -116,20 +108,12 @@ public class Player : MonoBehaviour
         if (!_isShieldActive)
         {
             _health -= 25;
+            _uiManager.UpdateHealth(_health);
 
             if (_health <= 0)
             {
-                _health = 0;
-                _lives--;
-                if (_lives <= 0)
-                {
-                    _spawnManager.onPlayerDeath();
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    _health = 100;
-                }
+                _spawnManager.onPlayerDeath();
+                Destroy(gameObject);
             }
         } else
         {

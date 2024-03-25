@@ -11,8 +11,6 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private float _speedBoostDuration = 5.0f;
     [SerializeField]
-    private float _shieldDuration = 5.0f;
-    [SerializeField]
     private int _powerupID;
 
     // Start is called before the first frame update
