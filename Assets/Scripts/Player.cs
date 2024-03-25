@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Player : MonoBehaviour
 {
@@ -33,6 +34,10 @@ public class Player : MonoBehaviour
     private float _shieldDuration = 5.0f;
     [SerializeField]
     private GameObject _shieldVisualizer;
+    [SerializeField]
+    private int _score;
+    [SerializeField]
+    private UIManager _uiManager;
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
@@ -45,6 +50,12 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
 
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
+
+        if ( _uiManager != null )
+        {
+            Debug.LogError("The UI Manager is null");
+        }
 
         if (_spawnManager == null )
         {
@@ -166,5 +177,11 @@ public class Player : MonoBehaviour
         {
             _shieldVisualizer.SetActive(true);
         }
+    }
+
+    public void AddScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
     }
 }
