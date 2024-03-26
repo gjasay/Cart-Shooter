@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
     private int _score;
     [SerializeField]
     private UIManager _uiManager;
+    [SerializeField]
+    private int _damagePerHit;
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
@@ -42,7 +44,7 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
 
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
-        _uiManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
+        _uiManager = GameObject.Find("UI").GetComponent<UIManager>();
 
         if ( _uiManager != null )
         {
@@ -107,13 +109,14 @@ public class Player : MonoBehaviour
     {
         if (!_isShieldActive)
         {
-            _health -= 25;
+            _health -= _damagePerHit;
             _uiManager.UpdateHealth(_health);
 
             if (_health <= 0)
             {
                 _spawnManager.onPlayerDeath();
                 Destroy(gameObject);
+                _uiManager.GameOver();
             }
         } else
         {
