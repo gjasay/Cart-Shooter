@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -15,8 +15,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _gameOverText;
     [SerializeField]
+    private GameObject _restartText;
+    [SerializeField]
     private float _flickerInterval = 0.5f;
-    private bool _isGameOver = false;
+    private GameManager _gameManager;
 
     private ProgressBar _progressBar;
     // Start is called before the first frame update
@@ -24,8 +26,9 @@ public class UIManager : MonoBehaviour
     {
         _gameOverDisplay.SetActive(false);
         _progressBar = GameObject.Find("Progress Bar").GetComponent<ProgressBar>();
+        _progressBar.SetProgress(1); //Sets UI to show full health
 
-        _progressBar.SetProgress(1);
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -64,7 +67,7 @@ public class UIManager : MonoBehaviour
         _gameOverText.text = "Game Over";
         yield return new WaitForSeconds(_flickerInterval);
         
-        while (_isGameOver)
+        while (true)
         {
             _gameOverText.text = "";
             yield return new WaitForSeconds(_flickerInterval);
@@ -73,10 +76,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void GameOver()
+    public void GameOverSequence()
     {
         _gameOverDisplay.SetActive(true);
-        _isGameOver = true;
+        _restartText.SetActive(true);
         StartCoroutine(GameOverFlickerRoutine());
+        _gameManager.GameOver();
     }
 }
