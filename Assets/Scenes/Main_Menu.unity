@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 363465676}
   - component: {fileID: 363465675}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Credits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -592,7 +592,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Wasteland Wander
+  m_Text: 
 --- !u!222 &1584081459
 CanvasRenderer:
   m_ObjectHideFlags: 0

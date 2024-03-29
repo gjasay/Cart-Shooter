@@ -32,6 +32,9 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     [SerializeField]
     private int _damagePerHit;
+    private float r;
+    private bool movingLeft;
+    private bool movingRight;
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
@@ -46,7 +49,7 @@ public class Player : MonoBehaviour
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("UI").GetComponent<UIManager>();
 
-        if ( _uiManager != null )
+        if ( _uiManager == null )
         {
             Debug.LogError("The UI Manager is null");
         }
@@ -73,7 +76,7 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        transform.Translate((_isSpeedBoostActive ? _speedMultiplier * _speed : _speed) * Time.deltaTime * new Vector3(horizontalInput, verticalInput, 0));
+        transform.Translate((_isSpeedBoostActive ? _speedMultiplier * _speed : _speed) * Time.deltaTime * new Vector3(horizontalInput * 2.5f, verticalInput, 0));
 
         // Restricts bound on Y Axis
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 4.5f), 0);
@@ -87,21 +90,54 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(9.4f, transform.position.y, 0);
         }
+
+        //Rotation
+        if (Input.GetKey(KeyCode.A))
+        {
+            movingLeft = true;
+            movingRight = false;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            movingLeft = false;
+            movingRight = true;
+        }
+        else
+        {
+            movingLeft = false;
+            movingRight = false;
+        }
+
+        float targetAngle = 0;
+        if (movingLeft && !movingRight)
+        {
+            targetAngle = 45;
+        }
+        else if (movingRight && !movingLeft)
+        {
+            targetAngle = -45;
+        }
+        else
+        {
+            targetAngle = 0;
+        }
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.z, targetAngle, ref r, 0.25f);
+        transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     void FireBullet()
     {
         _canFire = Time.time + (_isTripleShotActive ? _tripleShotFireRate : _defaultFireRate);
 
-        Vector3 bulletPosition = new Vector3(transform.position.x, transform.position.y + _bulletOffset, 0);
+        Vector3 bulletPosition = new Vector3(movingLeft ? transform.position.x - 1.2f : movingRight ? transform.position.x + 1.2f : transform.position.x, transform.position.y + _bulletOffset, 0);
 
         if (_isTripleShotActive)
         {
-            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            Instantiate(_tripleShotPrefab, transform.position, transform.rotation);
         }
         else
         {
-            Instantiate(_bulletPrefab, bulletPosition, Quaternion.identity);
+            Instantiate(_bulletPrefab, bulletPosition, transform.rotation);
         }
     }
 

@@ -2058,7 +2058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3.5
   _speedMultiplier: 2
-  _bulletPrefab: {fileID: 2399701628317631918, guid: 05fdf981397dbbe4eac21aa804de7c1e,
+  _bulletPrefab: {fileID: 5101113965918503418, guid: 05fdf981397dbbe4eac21aa804de7c1e,
     type: 3}
   _tripleShotPrefab: {fileID: 5575961254224995187, guid: 809848d9e1540274a90ae58419b8d96e,
     type: 3}

@@ -60,9 +60,9 @@ public class Background : MonoBehaviour
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-        if (transform.position.y <= -35f)
+        if (transform.position.y <= -34f)
         {
-            transform.position = new Vector3(transform.position.x, 35f, 0);
+            transform.position = new Vector3(transform.position.x, 34f, 0);
         }
     }
 }
