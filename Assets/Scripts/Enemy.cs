@@ -5,7 +5,11 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 4.0f;
+    private float _minSpeed = 3f;
+    [SerializeField]
+    private float _maxSpeed = 8f;
+
+    private float _speed;
 
     private Player _player;
     private Animator _animator;
@@ -15,6 +19,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _speed = Random.Range(_minSpeed, _maxSpeed);
         _player = GameObject.Find("Player").GetComponent<Player>();
         if (_player == null )
         {

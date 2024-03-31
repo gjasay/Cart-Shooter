@@ -27,11 +27,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _shieldVisualizer;
     [SerializeField]
+    private GameObject _leftEngine, _rightEngine;
+    [SerializeField]
     private int _score;
     [SerializeField]
     private UIManager _uiManager;
     [SerializeField]
     private int _damagePerHit;
+    [SerializeField]
+    private float _turnMaxAngle;
     private float r;
     private bool movingLeft;
     private bool movingRight;
@@ -40,6 +44,8 @@ public class Player : MonoBehaviour
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
     private SpawnManager _spawnManager;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -111,11 +117,11 @@ public class Player : MonoBehaviour
         float targetAngle = 0;
         if (movingLeft && !movingRight)
         {
-            targetAngle = 45;
+            targetAngle = _turnMaxAngle;
         }
         else if (movingRight && !movingLeft)
         {
-            targetAngle = -45;
+            targetAngle = _turnMaxAngle * -1;
         }
         else
         {
@@ -129,7 +135,7 @@ public class Player : MonoBehaviour
     {
         _canFire = Time.time + (_isTripleShotActive ? _tripleShotFireRate : _defaultFireRate);
 
-        Vector3 bulletPosition = new Vector3(movingLeft ? transform.position.x - 1.2f : movingRight ? transform.position.x + 1.2f : transform.position.x, transform.position.y + _bulletOffset, 0);
+        Vector3 bulletPosition = new Vector3(transform.position.x, transform.position.y + _bulletOffset, 0);
 
         if (_isTripleShotActive)
         {
@@ -137,7 +143,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Instantiate(_bulletPrefab, bulletPosition, transform.rotation);
+            Instantiate(_bulletPrefab, bulletPosition, transform.rotation * transform.rotation);
         }
     }
 
@@ -147,9 +153,17 @@ public class Player : MonoBehaviour
         {
             _health -= _damagePerHit;
             _uiManager.UpdateHealth(_health);
-
+            if (_health <= 66)
+            {
+                _leftEngine.SetActive(true);
+            }
+            if (_health <= 33)
+            {
+                _rightEngine.SetActive(true);
+            }
             if (_health <= 0)
             {
+                _health = 0;
                 _spawnManager.onPlayerDeath();
                 Destroy(gameObject);
                 _uiManager.GameOverSequence();
