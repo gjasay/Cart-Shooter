@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
     private int _damagePerHit;
     [SerializeField]
     private float _turnMaxAngle;
+    [SerializeField]
+    private AudioSource _audioSource;
     private float r;
     private bool movingLeft;
     private bool movingRight;
@@ -54,6 +56,7 @@ public class Player : MonoBehaviour
 
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("UI").GetComponent<UIManager>();
+        _audioSource = GetComponent<AudioSource>();
 
         if ( _uiManager == null )
         {
@@ -63,6 +66,10 @@ public class Player : MonoBehaviour
         if (_spawnManager == null )
         {
             Debug.LogError("The Spawn Manager is null");
+        }
+        if (_audioSource == null )
+        {
+            Debug.LogError("Player audio source is null");
         }
     }
 
@@ -145,6 +152,8 @@ public class Player : MonoBehaviour
         {
             Instantiate(_bulletPrefab, bulletPosition, transform.rotation * transform.rotation);
         }
+
+        _audioSource.Play();
     }
 
     public void Damage()

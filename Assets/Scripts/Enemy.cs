@@ -16,21 +16,30 @@ public class Enemy : MonoBehaviour
 
     private bool _enemyMoving = true;
 
+    private AudioSource _audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
         _speed = Random.Range(_minSpeed, _maxSpeed);
         _player = GameObject.Find("Player").GetComponent<Player>();
+        _audioSource = GetComponent<AudioSource>();
+        
         if (_player == null )
         {
-            Debug.Log("Player is null");
+            Debug.LogError("Player is null");
         }
 
         _animator = GetComponent<Animator>();
 
         if (_animator == null )
         {
-            Debug.Log("Animator is null");
+            Debug.LogError("Animator is null");
+        }
+
+        if (_audioSource == null )
+        {
+            Debug.LogError("Enemy audio is null");
         }
     }
 
@@ -52,6 +61,7 @@ public class Enemy : MonoBehaviour
             }
             _animator.SetTrigger("OnEnemyDeath");
             _enemyMoving = false;
+            _audioSource.Play();
             Destroy(this.gameObject, 1f);
         }
         else if (other.tag == "Bullet")
@@ -62,6 +72,7 @@ public class Enemy : MonoBehaviour
             }
             _animator.SetTrigger("OnEnemyDeath");
             _enemyMoving = false;
+            _audioSource.Play();
             Destroy(this.gameObject, 1f);
             Destroy(other.gameObject);
         }

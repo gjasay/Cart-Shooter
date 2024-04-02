@@ -98,6 +98,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4
+  _tripleShotDuration: 5
+  _speedBoostDuration: 5
+  _powerupID: 0
+  _soundEffect: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!50 &6376029043433502576
 Rigidbody2D:
   serializedVersion: 4

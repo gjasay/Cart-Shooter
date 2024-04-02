@@ -137,8 +137,8 @@ MonoBehaviour:
   _speed: 4
   _tripleShotDuration: 5
   _speedBoostDuration: 5
-  _shieldDuration: 5
   _powerupID: 1
+  _soundEffect: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!95 &1200089032
 Animator:
   serializedVersion: 3
