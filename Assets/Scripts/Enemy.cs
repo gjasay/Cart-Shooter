@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -8,6 +9,8 @@ public class Enemy : MonoBehaviour
     private float _minSpeed = 3f;
     [SerializeField]
     private float _maxSpeed = 8f;
+    [SerializeField]
+    private GameObject _bullet;
 
     private float _speed;
 
@@ -21,6 +24,8 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(ShootRoutine());
+
         _speed = Random.Range(_minSpeed, _maxSpeed);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
@@ -62,6 +67,8 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _enemyMoving = false;
             _audioSource.Play();
+
+            Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 1f);
         }
         else if (other.tag == "Bullet")
@@ -73,6 +80,8 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _enemyMoving = false;
             _audioSource.Play();
+
+            Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 1f);
             Destroy(other.gameObject);
         }
@@ -90,6 +99,17 @@ public class Enemy : MonoBehaviour
                 float randomX = Random.Range(-8.5f, 8.5f);
                 transform.position = new Vector3(randomX, 7f, 0);
             }
+        }
+    }
+
+    IEnumerator ShootRoutine()
+    {
+        while (true)
+        {
+            float secondsInBetween = Random.Range(2.0f, 5.0f);
+            yield return new WaitForSeconds(secondsInBetween);
+            Instantiate(_bullet, new Vector3(transform.position.x, transform.position.y-1f, transform.position.z), Quaternion.identity);
+
         }
     }
 }
