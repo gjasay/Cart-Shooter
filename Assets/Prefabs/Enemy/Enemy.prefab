@@ -147,7 +147,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minSpeed: 3
   _maxSpeed: 8
-  _bullet: {fileID: 4217047215022839819, guid: 98553c83e9035264ba7d5b769ddad8b0, type: 3}
+  _bulletPrefab: {fileID: 4217047215022839819, guid: 98553c83e9035264ba7d5b769ddad8b0,
+    type: 3}
 --- !u!95 &6524457693420910400
 Animator:
   serializedVersion: 3

@@ -26,12 +26,6 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerupRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     IEnumerator SpawnEnemyRoutine()
     {
         yield return new WaitForSeconds(3f);
@@ -57,7 +51,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    public void onPlayerDeath()
+    public void OnPlayerDeath()
     {
         _stopSpawning = true;
     }

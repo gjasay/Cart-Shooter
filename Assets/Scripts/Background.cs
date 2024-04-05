@@ -6,10 +6,10 @@ public class Background : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 4.0f;
-    [SerializeField]
-    private float _speedMultiplier = 2.0f;
 
     private bool _isSpeedBoostActive = false;
+    [SerializeField]
+    private GameObject _otherBackground;
 
     // Start is called before the first frame update
     void Start()
@@ -18,12 +18,12 @@ public class Background : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         CalculateMovement();                        
     }
 
-    IEnumerator SpeedBoostRoutine(float speedBoostDuration)
+    IEnumerator SpeedBoostRoutine(float speedBoostDuration, float speedMultiplier)
     {
         if (_isSpeedBoostActive)
         {
@@ -31,37 +31,44 @@ public class Background : MonoBehaviour
         }
 
         _isSpeedBoostActive = true;
-        UpdateSpeed();
+        UpdateSpeed(speedMultiplier, _isSpeedBoostActive);
         yield return new WaitForSeconds(speedBoostDuration);
         _isSpeedBoostActive = false;
-        UpdateSpeed();
+        UpdateSpeed(speedMultiplier, _isSpeedBoostActive);
     }
 
-    public void ActivateSpeedBoost(float speedBoostDuration)
+    public void ActivateSpeedBoost(float speedBoostDuration, float speedMultiplier = 2.0f)
     {
-        StartCoroutine(SpeedBoostRoutine(speedBoostDuration));
+        StartCoroutine(SpeedBoostRoutine(speedBoostDuration, speedMultiplier));
     }
 
-    void UpdateSpeed()
+    public void UpdateSpeed(float speedMultiplier, bool isActive)
     {
-        if (_isSpeedBoostActive)
+        if (isActive)
         {
-            _speed *= _speedMultiplier;
+            _speed *= speedMultiplier;
         }
         else
         {
-            _speed /= _speedMultiplier;
+            _speed /= speedMultiplier;
             
         }
     }
 
     void CalculateMovement()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        transform.Translate(Vector3.down * _speed * Time.fixedDeltaTime);
 
-        if (transform.position.y <= -30f)
+        if (transform.position.y <= -25f)
         {
-            transform.position = new Vector3(transform.position.x, 35.5f, 0);
+            float backgroundOffset = _otherBackground.transform.position.y + _otherBackground.GetComponent<SpriteRenderer>().bounds.size.y;
+            transform.position = new Vector3(transform.position.x, backgroundOffset, 0);
+        }
+        else if (_otherBackground.transform.position.y > transform.position.y)
+        {
+            float backgroundOffset = _otherBackground.transform.position.y - _otherBackground.GetComponent<SpriteRenderer>().bounds.size.y;
+            transform.position = new Vector3(transform.position.x, backgroundOffset, 0);
         }
     }
+
 }

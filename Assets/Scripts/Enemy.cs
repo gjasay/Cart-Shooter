@@ -10,14 +10,14 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _maxSpeed = 8f;
     [SerializeField]
-    private GameObject _bullet;
+    private GameObject _bulletPrefab;
 
     private float _speed;
 
     private Player _player;
     private Animator _animator;
 
-    private bool _enemyMoving = true;
+    private bool _isEnemyAlive = true;
 
     private AudioSource _audioSource;
 
@@ -29,13 +29,13 @@ public class Enemy : MonoBehaviour
         _speed = Random.Range(_minSpeed, _maxSpeed);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
+        _animator = GetComponent<Animator>();
         
         if (_player == null )
         {
             Debug.LogError("Player is null");
         }
 
-        _animator = GetComponent<Animator>();
 
         if (_animator == null )
         {
@@ -54,6 +54,20 @@ public class Enemy : MonoBehaviour
         CalculateMovement();
     }
 
+    private void CalculateMovement()
+    {
+        if (_isEnemyAlive)
+        {
+            transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
+            if (transform.position.y < -6)
+            {
+                float randomX = Random.Range(-8.5f, 8.5f);
+                transform.position = new Vector3(randomX, 7f, 0);
+            }
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
 
@@ -65,7 +79,7 @@ public class Enemy : MonoBehaviour
                 _player.Damage();
             }
             _animator.SetTrigger("OnEnemyDeath");
-            _enemyMoving = false;
+            _isEnemyAlive = false;
             _audioSource.Play();
 
             Destroy(GetComponent<Collider2D>());
@@ -78,38 +92,23 @@ public class Enemy : MonoBehaviour
                 _player.AddScore(10);
             }
             _animator.SetTrigger("OnEnemyDeath");
-            _enemyMoving = false;
+            _isEnemyAlive = false;
             _audioSource.Play();
 
             Destroy(GetComponent<Collider2D>());
-            Destroy(this.gameObject, 1f);
             Destroy(other.gameObject);
-        }
-
-    }
-
-    private void CalculateMovement()
-    {
-        if (_enemyMoving)
-        {
-            transform.Translate(Vector3.down * _speed * Time.deltaTime);
-
-            if (transform.position.y < -6)
-            {
-                float randomX = Random.Range(-8.5f, 8.5f);
-                transform.position = new Vector3(randomX, 7f, 0);
-            }
+            Destroy(this.gameObject, 1f);
         }
     }
 
     IEnumerator ShootRoutine()
     {
-        while (true)
+        while (_isEnemyAlive)
         {
             float secondsInBetween = Random.Range(2.0f, 5.0f);
             yield return new WaitForSeconds(secondsInBetween);
-            Instantiate(_bullet, new Vector3(transform.position.x, transform.position.y-1f, transform.position.z), Quaternion.identity);
-
+            GameObject newBullet = Instantiate(_bulletPrefab, new Vector3(transform.position.x, transform.position.y-1f, transform.position.z), Quaternion.identity);
+            newBullet.GetComponent<Laser>().SetEnemyBullet();
         }
     }
 }

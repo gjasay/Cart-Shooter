@@ -8,18 +8,13 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField]
-    private Text _scoreText;
-    [SerializeField]
-    private GameObject _gameOverDisplay;
-    [SerializeField]
-    private Text _gameOverText;
-    [SerializeField]
-    private GameObject _restartText;
-    [SerializeField]
-    private float _flickerInterval = 0.5f;
+    [SerializeField] private Text _scoreText;
+    [SerializeField] private Text _ammoText;
+    [SerializeField] private Text _gameOverText;
+    [SerializeField] private GameObject _restartText;
+    [SerializeField] private GameObject _gameOverDisplay;
+    [SerializeField] private float _flickerInterval = 0.5f;
     private GameManager _gameManager;
-
     private ProgressBar _progressBar;
     // Start is called before the first frame update
     void Start()
@@ -40,6 +35,11 @@ public class UIManager : MonoBehaviour
     public void UpdateScore(int score)
     {
         _scoreText.text = "Score: " + score.ToString();
+    }
+
+    public void UpdateAmmoCount(int ammo)
+    {
+        _ammoText.text = "Ammo: " + ammo.ToString();
     }
 
     public void UpdateHealth(int health)
