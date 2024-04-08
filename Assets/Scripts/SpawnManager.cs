@@ -4,18 +4,12 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _enemyPrefab;
-    [SerializeField]
-    private GameObject _enemyContainer;
-    [SerializeField]
-    private GameObject[] _powerups;
-    [SerializeField]
-    private GameObject _powerupContainer;
-    [SerializeField]
-    private float _timeBetweenEnemySpawns = 5.0f;
-    [SerializeField]
-    private float _minWaitForPowerup, _maxWaitForPowerup;
+    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _enemyContainer;
+    [SerializeField] private GameObject[] _powerups;
+    [SerializeField] private GameObject _powerupContainer;
+    [SerializeField] private float _timeBetweenEnemySpawns = 5.0f;
+    [SerializeField] private float _minWaitForPowerup, _maxWaitForPowerup;
 
     private bool _stopSpawning = false;
 
@@ -44,7 +38,7 @@ public class SpawnManager : MonoBehaviour
 
         while (!_stopSpawning)
         {
-            int randomPowerup = Random.Range(0, 3);
+            int randomPowerup = Random.Range(0, _powerups.Length);
             GameObject newPowerup = Instantiate(_powerups[randomPowerup], new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
             newPowerup.transform.parent = _powerupContainer.transform;
             yield return new WaitForSeconds(Random.Range(_minWaitForPowerup, _maxWaitForPowerup));

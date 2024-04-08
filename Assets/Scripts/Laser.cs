@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 8.0f;
+    [SerializeField] private float _speed = 8.0f;
 
     private bool _isEnemyBullet = false;
 
@@ -42,8 +41,9 @@ public class Laser : MonoBehaviour
             }
         }
     }
-    public void SetEnemyBullet()
+    public void SetEnemyBullet(float speed)
     {
+        _speed = speed;
         _isEnemyBullet = true;
     }
 }

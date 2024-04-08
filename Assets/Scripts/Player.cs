@@ -10,14 +10,18 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speedBoostMultiplier = 2f;
     [SerializeField] private float _thrusterMultiplier = 1.5f;
     private bool _isThrusterEnabled = false;
+    private float _boostCharge = 100f;
     private float _currentVelocity;
     //Shooting related variables
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private GameObject _tripleShotPrefab;
+    [SerializeField] private GameObject _explosiveShotPrefab;
     [SerializeField] private float _defaultFireRate = 0.15f;
     [SerializeField] private float _tripleShotFireRate = 0.5f;
     [SerializeField] private float _bulletOffset = 1.5f;
     [SerializeField] private int _ammo = 15;
+    private bool _isTripleShotActive = false;
+    private bool _isExplosiveShotActive = false;
     private float _canFire = -0.1f;
     //Health and Shield related variables
     [SerializeField] private int _health = 100;
@@ -30,11 +34,11 @@ public class Player : MonoBehaviour
     private Color _secondHitShieldTransparency = new Color(255f, 255f, 255f, 0.5f);
     //Misc. Variables
     [SerializeField] private AudioSource _audioSource;
-    private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private GameObject[] _backgrounds;
+    private Animator _cameraAnim;
 
 
 
@@ -47,10 +51,16 @@ public class Player : MonoBehaviour
         _uiManager = GameObject.Find("UI").GetComponent<UIManager>();
         _backgrounds = GameObject.FindGameObjectsWithTag("Background");
         _audioSource = GetComponent<AudioSource>();
+        _cameraAnim = GameObject.Find("Main Camera").GetComponent<Animator>();
 
         if ( _uiManager == null )
         {
             Debug.LogError("The UI Manager is null");
+        }
+        else
+        {
+            _uiManager.UpdateHealth(_health);
+            _uiManager.UpdateBoost(_boostCharge);
         }
 
         if (_spawnManager == null )
@@ -73,15 +83,7 @@ public class Player : MonoBehaviour
             FireBullet();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_isThrusterEnabled)
-        {
-            ToggleThruster();
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            ToggleThruster();
-        }
-
+        ThrusterInput();
     }
     void CalculateMovement()
     {
@@ -108,18 +110,39 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
-    void ToggleThruster()
+    void ThrusterInput()
     {
-        if (!_isThrusterEnabled)
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            _isThrusterEnabled = true;
-            transform.GetChild(6).gameObject.SetActive(true); //Toggle thruster visibilty
+            ToggleThruster(true);
         }
-        else if (_isThrusterEnabled)
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            ToggleThruster(false);
+        }
+
+        if (_isThrusterEnabled && _boostCharge <= 0)
         {
             _isThrusterEnabled = false;
-            transform.GetChild(6).gameObject.SetActive(false); //Toggle thruster visibilty
+            ToggleThruster(false);
         }
+
+        if (_isThrusterEnabled && _boostCharge > 0)
+        {
+            _boostCharge -= 0.25f;
+            _uiManager.UpdateBoost(_boostCharge);
+        }
+        else if (!_isThrusterEnabled && _boostCharge < 100)
+        {
+            _boostCharge += 0.1f;
+            _uiManager.UpdateBoost(_boostCharge);
+        }
+    }
+
+    void ToggleThruster(bool setActive)
+    {
+        _isThrusterEnabled = setActive;
+        transform.GetChild(6).gameObject.SetActive(setActive); //Toggle thruster visibilty
         foreach (GameObject background in _backgrounds)
         {
             background.GetComponent<Background>().UpdateSpeed(_thrusterMultiplier, _isThrusterEnabled);
@@ -140,6 +163,10 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_tripleShotPrefab, transform.position, transform.rotation);
             }
+            else if (_isExplosiveShotActive)
+            {
+                Instantiate(_explosiveShotPrefab, transform.position, transform.rotation);
+            }
             else
             {
                 Instantiate(_bulletPrefab, bulletPosition, transform.rotation * transform.rotation);
@@ -147,26 +174,16 @@ public class Player : MonoBehaviour
 
             _audioSource.Play();
         }
-        else
-        {
-
-        }
     }
 
     public void Damage()
     {
+        _cameraAnim.SetTrigger("OnDamage");
         if (_shieldHitsLeft <= 0)
         {
             _health -= _damagePerHit;
             _uiManager.UpdateHealth(_health);
-            if (_health <= 66)
-            {
-                _leftEngine.SetActive(true);
-            }
-            if (_health <= 33)
-            {
-                _rightEngine.SetActive(true);
-            }
+            UpdateHealthIndicators();
             if (_health <= 0)
             {
                 _health = 0;
@@ -196,6 +213,25 @@ public class Player : MonoBehaviour
                     _shieldVisualizer.SetActive(true);
                     break;
             }
+        }
+        UpdateHealthIndicators();
+    }
+
+    void UpdateHealthIndicators()
+    {
+        if (_health <= 75 && _health > 50)
+        {
+            _leftEngine.SetActive(true);
+        }
+        else if (_health <= 50)
+        {
+            _leftEngine.SetActive(true);
+            _rightEngine.SetActive(true);
+        }
+        else
+        {
+            _leftEngine.SetActive(false);
+            _rightEngine.SetActive(false);
         }
     }
 
@@ -234,6 +270,18 @@ public class Player : MonoBehaviour
 
     }
 
+    public IEnumerator ExplosiveShotRoutine(float explosiveShotDuration)
+    {
+        if (_isExplosiveShotActive)
+        {
+            yield return new WaitUntil(() => !_isExplosiveShotActive);
+        }
+
+        _isExplosiveShotActive = true;
+        yield return new WaitForSeconds(explosiveShotDuration);
+        _isExplosiveShotActive = false;
+    }
+
     public void ActivateShield()
     {
         _shieldHitsLeft = 3;
@@ -248,5 +296,25 @@ public class Player : MonoBehaviour
     {
         _score += points;
         _uiManager.UpdateScore(_score);
+    }
+
+    public void CollectAmmo()
+    {
+        _ammo += 10;
+        _uiManager.UpdateAmmoCount(_ammo);
+    }
+
+    public void CollectHealth()
+    {
+        if (_health <= 85)
+        {
+            _health += 15;
+        }
+        else
+        {
+            _health = 100;
+        }
+        _uiManager.UpdateHealth(_health);
+        UpdateHealthIndicators(); 
     }
 }

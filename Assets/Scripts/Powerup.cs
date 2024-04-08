@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class Powerup : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 4.0f; //IDs for powerups: TripleShot: 0, Speed Boost: 1, Shields: 2
-    [SerializeField]
-    private float _tripleShotDuration = 5.0f;
-    [SerializeField]
-    private float _speedBoostDuration = 5.0f;
-    [SerializeField]
-    private int _powerupID;
-    [SerializeField]
-    private AudioClip _soundEffect;
+    [SerializeField] private float _speed = 4.0f; //IDs for powerups: TripleShot: 0, Speed Boost: 1, Shields: 2
+    [SerializeField] private float _tripleShotDuration = 5.0f;
+    [SerializeField] private float _speedBoostDuration = 5.0f;
+    [SerializeField] private float _explosiveShotDuration = 5.0f;
+    [SerializeField] private int _powerupID;
+    [SerializeField] private AudioClip _soundEffect;
 
     // Update is called once per frame
     void Update()
@@ -55,6 +51,15 @@ public class Powerup : MonoBehaviour
                         break;
                     case 2:
                         player.ActivateShield();
+                        break;
+                    case 3:
+                        player.CollectAmmo();
+                        break;
+                    case 4:
+                        player.CollectHealth();
+                        break;
+                    case 5:
+                        player.StartCoroutine(player.ExplosiveShotRoutine(_explosiveShotDuration));
                         break;
                     default:
                         Debug.LogError("Invalid Powerup ID");

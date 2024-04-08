@@ -15,13 +15,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _gameOverDisplay;
     [SerializeField] private float _flickerInterval = 0.5f;
     private GameManager _gameManager;
-    private ProgressBar _progressBar;
+    private ProgressBar _healthBar;
+    private ProgressBar _boostBar;
     // Start is called before the first frame update
     void Start()
     {
         _gameOverDisplay.SetActive(false);
-        _progressBar = GameObject.Find("Progress Bar").GetComponent<ProgressBar>();
-        _progressBar.SetProgress(1); //Sets UI to show full health
+        _healthBar = GameObject.Find("Health Bar").GetComponent<ProgressBar>();
+        _boostBar = GameObject.Find("Boost Bar").GetComponent<ProgressBar>();
+
+        _healthBar.SetProgress(1); //Sets UI to show full health
 
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
@@ -45,7 +48,33 @@ public class UIManager : MonoBehaviour
     public void UpdateHealth(int health)
     {
         float progress = health / 100f;
-        _progressBar.SetProgress(progress);
+
+        if (progress < 0)
+        {
+            progress = 0;
+        }
+        else if (progress > 1)
+        {
+            progress = 1;
+        }
+
+        _healthBar.SetProgress(progress);
+    }
+
+    public void UpdateBoost(float boost)
+    {
+        float progress = boost / 100f;
+
+        if (progress < 0)
+        {
+            progress = 0;
+        }
+        else if (progress > 1)
+        {
+            progress = 1;
+        }
+
+        _boostBar.SetProgress(progress);
     }
 
     IEnumerator GameOverFlickerRoutine()

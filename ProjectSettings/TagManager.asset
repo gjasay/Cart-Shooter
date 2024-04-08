@@ -8,6 +8,8 @@ TagManager:
   - Bullet
   - Background
   - Enemy Bullet
+  - Explosive Bullet
+  - Explosion
   layers:
   - Default
   - TransparentFX

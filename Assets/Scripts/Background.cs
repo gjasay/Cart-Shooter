@@ -5,6 +5,8 @@ using UnityEngine;
 public class Background : MonoBehaviour
 {
     [SerializeField]
+    private float _defaultSpeed = 4.0f;
+
     private float _speed = 4.0f;
 
     private bool _isSpeedBoostActive = false;
@@ -14,7 +16,7 @@ public class Background : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        _speed = _defaultSpeed;
     }
 
     // Update is called once per frame
@@ -50,8 +52,7 @@ public class Background : MonoBehaviour
         }
         else
         {
-            _speed /= speedMultiplier;
-            
+            _speed = _defaultSpeed;
         }
     }
 
