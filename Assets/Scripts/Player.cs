@@ -76,6 +76,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ThrusterInput();
         CalculateMovement();
 
         if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
@@ -83,7 +84,6 @@ public class Player : MonoBehaviour
             FireBullet();
         }
 
-        ThrusterInput();
     }
     void CalculateMovement()
     {
@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
             }
             else if (_isExplosiveShotActive)
             {
-                Instantiate(_explosiveShotPrefab, transform.position, transform.rotation);
+                Instantiate(_explosiveShotPrefab, bulletPosition, transform.rotation);
             }
             else
             {

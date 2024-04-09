@@ -151,6 +151,7 @@ MonoBehaviour:
     type: 3}
   _explosionPrefab: {fileID: 5302844600416800790, guid: af3413d2855464945ac7e8b6067dbac5,
     type: 3}
+  _switchDirectionTimeInterval: 1.5
 --- !u!95 &6524457693420910400
 Animator:
   serializedVersion: 3

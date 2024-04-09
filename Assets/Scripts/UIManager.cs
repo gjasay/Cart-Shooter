@@ -79,30 +79,23 @@ public class UIManager : MonoBehaviour
 
     IEnumerator GameOverFlickerRoutine()
     {
-        _gameOverText.text = "G";
-        yield return new WaitForSeconds(_flickerInterval);
-        _gameOverText.text = "Ga";
-        yield return new WaitForSeconds(_flickerInterval);
-        _gameOverText.text = "Gam";
-        yield return new WaitForSeconds(_flickerInterval);
-        _gameOverText.text = "Game";
-        yield return new WaitForSeconds(_flickerInterval);
-        _gameOverText.text = "Game O";
-        yield return new WaitForSeconds(_flickerInterval);
-        _gameOverText.text = "Game Ov";
-        yield return new WaitForSeconds(_flickerInterval);
-        _gameOverText.text = "Game Ove";
-        yield return new WaitForSeconds(_flickerInterval);
-        _gameOverText.text = "Game Over";
-        yield return new WaitForSeconds(_flickerInterval);
-        
+        _gameOverText.text = "";
+
+        string gameOverText = "Game Over";
+        for (int i = 0; i <= gameOverText.Length; i++)
+        {
+            _gameOverText.text = gameOverText.Substring(0, i);
+            yield return new WaitForSeconds(_flickerInterval);
+        }
+
         while (true)
         {
             _gameOverText.text = "";
             yield return new WaitForSeconds(_flickerInterval);
-            _gameOverText.text = "Game Over";
+            _gameOverText.text = gameOverText;
             yield return new WaitForSeconds(_flickerInterval);
         }
+
     }
 
     public void GameOverSequence()

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -10,6 +9,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _maxSpeed = 8f;
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private float _switchDirectionTimeInterval;
+    private float _switchDirectionTime = 0f;
+    private bool _isDirectionLeft = false;
 
     private float _speed;
 
@@ -55,6 +57,29 @@ public class Enemy : MonoBehaviour
 
     private void CalculateMovement()
     {
+
+        if (_isEnemyAlive && Time.time > _switchDirectionTime)
+        {
+            if (_isDirectionLeft)
+            {
+                _isDirectionLeft = false;
+            }
+            else
+            {
+                _isDirectionLeft = true;
+            }
+            _switchDirectionTime = Time.time + _switchDirectionTimeInterval;
+        }
+
+        if (_isDirectionLeft)
+        {
+            transform.Translate(Vector3.left * _speed / 2 * Time.deltaTime);
+        } 
+        else
+        {
+            transform.Translate(Vector3.right * _speed / 2 * Time.deltaTime);
+        }
+
         if (_isEnemyAlive)
         {
             transform.Translate(Vector3.down * _speed * Time.deltaTime);

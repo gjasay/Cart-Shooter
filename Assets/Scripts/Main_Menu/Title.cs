@@ -15,47 +15,18 @@ public class Title : MonoBehaviour
         StartCoroutine(TitleRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if (!_scalingPlayButton || _playButton.transform.localScale.y <= 1)
-        //{
-            //_playButton.transform.localScale += new Vector3(0.25f, 0.25f, 0.25f) * Time.deltaTime;
-        //}
-    }
-
     IEnumerator TitleRoutine()
     {
-        Text text = this.GetComponent<Text>();
-        text.text = "W";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wa";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Was";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wast";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Waste";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wastel";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wastela";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wastelan";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wasteland";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wasteland W";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wasteland Wa";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wasteland Wan";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wasteland Wand";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wasteland Wande";
-        yield return new WaitForSeconds(_titleInterval);
-        text.text = "Wasteland Wander";
-        yield return new WaitForSeconds(_titleInterval);
+        Text title = this.GetComponent<Text>();
+        title.text = "";
+
+        string titleText = "Wasteland Wander"; 
+
+        for (int i = 0; i <= titleText.Length; i++)
+        {
+            title.text = titleText.Substring(0, i);
+            yield return new WaitForSeconds(_titleInterval);
+        }
+
     }
 }
