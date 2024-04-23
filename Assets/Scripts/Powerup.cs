@@ -61,6 +61,10 @@ public class Powerup : MonoBehaviour
                     case 5:
                         player.StartCoroutine(player.ExplosiveShotRoutine(_explosiveShotDuration));
                         break;
+                    case 6:
+                        player.Damage();
+                        GetComponent<Barrel>().Explode();
+                        break;
                     default:
                         Debug.LogError("Invalid Powerup ID");
                         break;
@@ -71,7 +75,7 @@ public class Powerup : MonoBehaviour
                 Debug.LogError("Player Component is null");
             }
 
-            Destroy(this.gameObject);
+            if (_powerupID != 6) Destroy(this.gameObject);
         }
     }
 }

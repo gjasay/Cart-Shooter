@@ -31,11 +31,16 @@ public class Barrel : MonoBehaviour
         {
             if (_explosionPrefab != null)
             {
-                Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
                 Destroy(collision.gameObject);
                 _spawnManager.StartSpawning();
-                Destroy(this.gameObject);
+                Explode();
             }
         }
+    }
+
+    public void Explode()
+    {
+        Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
     }
 }
