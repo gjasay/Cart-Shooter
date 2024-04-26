@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -3552484514490346310}
   - component: {fileID: 8152459985091716080}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Dodging Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,7 +160,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3654353829605793084}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3654353829605793084}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5398304bdbe56945a873c3d45f924da, type: 3}
   m_Name: 
@@ -270,9 +270,10 @@ MonoBehaviour:
     type: 3}
   _minTimeInterval: 1
   _maxTimeInterval: 5
-  _enemyId: 0
+  _enemyId: 2
   rotationSpeed: 1
   _shieldVisualizer: {fileID: 0}
+  _ramSpeed: 1.25
 --- !u!1 &6167877340967037995
 GameObject:
   m_ObjectHideFlags: 0

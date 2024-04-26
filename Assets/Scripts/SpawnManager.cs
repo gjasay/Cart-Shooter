@@ -37,12 +37,10 @@ public class SpawnManager : MonoBehaviour
             
             if (randomEnemy <= 3)
             {
-                Debug.Log("Spawning a rare enemy");
                 newEnemy = Instantiate(_rareEnemies[Random.Range(0, _rareEnemies.Length)], new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
             }
             else
             {
-                Debug.Log("Spawning a common enemy");
                 newEnemy = Instantiate(_commonEnemies[Random.Range(0, _commonEnemies.Length)], new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
             }
             newEnemy.transform.parent = _enemyContainer.transform;
@@ -61,12 +59,10 @@ public class SpawnManager : MonoBehaviour
 
             if (randomPowerup <= 3)
             {
-                Debug.Log("Spawning a rare powerup");
                 newPowerup = Instantiate(_rarePowerups[Random.Range(0, _rarePowerups.Length)], new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
             }
             else
             {
-                Debug.Log("Spawning a common powerup");
                 newPowerup = Instantiate(_commonPowerups[Random.Range(0, _commonPowerups.Length)], new Vector3(Random.Range(-8.4f, 8.4f), 8f, 0f), Quaternion.identity);
             }
             newPowerup.transform.parent = _powerupContainer.transform;
@@ -88,7 +84,6 @@ public class SpawnManager : MonoBehaviour
             switch (_wave)
             {
                 case 1:
-                    Debug.Log("This switch case is being called");
                     _enemiesAlive = 3;
                     break;
                 case 2:
