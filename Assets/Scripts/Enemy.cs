@@ -13,7 +13,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int _enemyId;
     [SerializeField] private float rotationSpeed = 0.75f;
     [SerializeField] private GameObject _shieldVisualizer;
+    [SerializeField] private float _shootBehindTimeInterval = 1f;
 
+    private float _shootBehindTime = 0f;
     private float _switchDirectionTimeInterval;
     private float _switchDirectionTime = 0f;
     private bool _isDirectionLeft = false;
@@ -83,8 +85,19 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         CalculateMovement();
-        if (_enemyId == 0) CastRayToRam();
-        if (_enemyId == 2) AvoidShots();
+        // Enemy specific behavior
+        switch (_enemyId)
+        {
+            case 0:
+                CastRayToRam();
+                break;
+            case 2:
+                AvoidShots();
+                break;
+            case 3:
+                DetectAndShootBehind();
+                break;
+        }
     }
 
     private void CalculateMovement()
@@ -160,6 +173,21 @@ public class Enemy : MonoBehaviour
        {
             transform.Translate(_dodgeDirection * _speed * 5 * Time.deltaTime);
        }
+    }
+
+    private void DetectAndShootBehind()
+    {
+        Vector3 raycastOrigin = transform.position + new Vector3(0f, 1f, 0f);
+        float raycastDistance = 15f;
+        RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, transform.TransformDirection(Vector3.up), raycastDistance);
+        Debug.DrawRay(raycastOrigin, transform.TransformDirection(Vector3.up) * raycastDistance, Color.red);
+
+        if (hit && hit.collider.tag == "Player" && Time.time > _shootBehindTime)
+        {
+            _shootBehindTime = Time.time + _shootBehindTimeInterval;
+            // Shoot behind
+            Instantiate(_roverBulletPrefab, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), transform.rotation);
+        }
     }
 
     private void RoverMovement()
@@ -261,18 +289,20 @@ public class Enemy : MonoBehaviour
             while (_isEnemyAlive)
             {
                 float secondsInBetween = 0;
-                if (_enemyId == 0)
+                if (_enemyId == 1)
+                {
+                    
+                    secondsInBetween = Random.Range(0.5f, 1f);
+
+                }
+                else 
                 {
                     secondsInBetween = Random.Range(1f, 3f);
-                }
-                else if (_enemyId == 1)
-                {
-                    secondsInBetween = Random.Range(0.5f, 1f);
                 }
 
                 yield return new WaitForSeconds(secondsInBetween);
                 // 0 = Rover, 1 = Drone; I'm switching prefab based on enemyId
-                GameObject newBullet = Instantiate(_enemyId == 0 ? _roverBulletPrefab : _droneBulletPrefab, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), transform.rotation);
+                GameObject newBullet = Instantiate(_enemyId == 1 ? _droneBulletPrefab : _roverBulletPrefab, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), transform.rotation);
                 newBullet.GetComponent<Laser>().SetEnemyBullet(_speed * 2f);
             }
         }
