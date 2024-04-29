@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1200089032}
   m_Layer: 0
   m_Name: Speed_Powerup
-  m_TagString: Untagged
+  m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,6 +137,7 @@ MonoBehaviour:
   _speed: 4
   _tripleShotDuration: 5
   _speedBoostDuration: 5
+  _explosiveShotDuration: 5
   _powerupID: 1
   _soundEffect: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!95 &1200089032

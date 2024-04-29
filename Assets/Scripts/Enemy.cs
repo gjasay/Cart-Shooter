@@ -13,9 +13,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int _enemyId;
     [SerializeField] private float rotationSpeed = 0.75f;
     [SerializeField] private GameObject _shieldVisualizer;
-    [SerializeField] private float _shootBehindTimeInterval = 1f;
+    [SerializeField] private float _specialFireTimeInterval = 1f;
 
-    private float _shootBehindTime = 0f;
+    private float _specialFireTime = 0f;
     private float _switchDirectionTimeInterval;
     private float _switchDirectionTime = 0f;
     private bool _isDirectionLeft = false;
@@ -85,6 +85,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+        ShootPowerups();
         // Enemy specific behavior
         switch (_enemyId)
         {
@@ -122,6 +123,21 @@ public class Enemy : MonoBehaviour
                 float randomX = Random.Range(-8.5f, 8.5f);
                 transform.position = new Vector3(randomX, 7f, 0);
             }
+        }
+    }
+
+    private void ShootPowerups()
+    {
+        Vector3 raycastOrigin = transform.position + new Vector3(0f, -1f, 0f); // Offset the raycast to be at the bottom of the enemy object (1 unit below the enemy object)
+        RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, transform.TransformDirection(Vector3.down), 2.65f);
+        Debug.DrawRay(raycastOrigin, transform.TransformDirection(Vector3.down) * 2.65f, Color.red);
+
+        if (hit && hit.collider.tag == "Powerup" && Time.time > _specialFireTime)
+        {
+            _specialFireTime = Time.time + _specialFireTimeInterval;
+            // 0 = Rover, 1 = Drone; I'm switching prefab based on enemyId
+            GameObject newBullet = Instantiate(_enemyId == 1 ? _droneBulletPrefab : _roverBulletPrefab, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), transform.rotation);
+            newBullet.GetComponent<Laser>().SetEnemyBullet(_speed * 2f);
         }
     }
     
@@ -182,9 +198,9 @@ public class Enemy : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, transform.TransformDirection(Vector3.up), raycastDistance);
         Debug.DrawRay(raycastOrigin, transform.TransformDirection(Vector3.up) * raycastDistance, Color.red);
 
-        if (hit && hit.collider.tag == "Player" && Time.time > _shootBehindTime)
+        if (hit && hit.collider.tag == "Player" && Time.time > _specialFireTime)
         {
-            _shootBehindTime = Time.time + _shootBehindTimeInterval;
+            _specialFireTime = Time.time + _specialFireTimeInterval;
             // Shoot behind
             Instantiate(_roverBulletPrefab, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), transform.rotation);
         }

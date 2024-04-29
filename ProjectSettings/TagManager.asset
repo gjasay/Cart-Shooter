@@ -10,6 +10,7 @@ TagManager:
   - Enemy Bullet
   - Explosive Bullet
   - Explosion
+  - Powerup
   layers:
   - Default
   - TransparentFX

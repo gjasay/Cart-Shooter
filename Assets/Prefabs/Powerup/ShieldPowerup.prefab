@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8234487253920738604}
   m_Layer: 0
   m_Name: ShieldPowerup
-  m_TagString: Untagged
+  m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,7 +95,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.022925597, y: -0.14902629}
@@ -137,6 +137,7 @@ MonoBehaviour:
   _speed: 4
   _tripleShotDuration: 5
   _speedBoostDuration: 5
+  _explosiveShotDuration: 5
   _powerupID: 2
   _soundEffect: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!95 &8234487253920738604

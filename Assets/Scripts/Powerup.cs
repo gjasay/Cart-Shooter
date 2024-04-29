@@ -11,6 +11,14 @@ public class Powerup : MonoBehaviour
     [SerializeField] private int _powerupID;
     [SerializeField] private AudioClip _soundEffect;
 
+    private Player _player;
+    private bool _isMovingTowardsPlayer = false;
+
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -18,6 +26,13 @@ public class Powerup : MonoBehaviour
         if (transform.position.y < -5f)
         {
             Destroy(this.gameObject);
+        }
+
+        if (_isMovingTowardsPlayer)
+        {
+            Vector3 direction = _player.transform.position - transform.position;
+
+            transform.Translate(direction.normalized * _speed * 1.5f * Time.deltaTime);
         }
     }
 
@@ -77,5 +92,15 @@ public class Powerup : MonoBehaviour
 
             if (_powerupID != 6) Destroy(this.gameObject);
         }
+        else if (collision.tag == "Enemy Bullet")
+        {
+            Destroy(collision.gameObject);
+            Destroy(this.gameObject);
+        }
+    }
+
+    public void MoveTowardsPlayer()
+    {
+        _isMovingTowardsPlayer = true;
     }
 }

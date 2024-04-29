@@ -84,6 +84,14 @@ public class Player : MonoBehaviour
             FireBullet();
         }
 
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            //Find the Powerup object if it exists if it does not exist, return null
+            Powerup powerup = GameObject.FindGameObjectWithTag("Powerup") ? GameObject.FindGameObjectWithTag("Powerup").GetComponent<Powerup>() : null;
+            
+            if (powerup != null) powerup.MoveTowardsPlayer();
+        }
+
     }
     void CalculateMovement()
     {
