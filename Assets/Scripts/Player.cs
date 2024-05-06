@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private GameObject _tripleShotPrefab;
     [SerializeField] private GameObject _explosiveShotPrefab;
+    [SerializeField] private GameObject _misslePrefab;
     [SerializeField] private float _defaultFireRate = 0.15f;
     [SerializeField] private float _tripleShotFireRate = 0.5f;
     [SerializeField] private float _bulletOffset = 1.5f;
@@ -23,6 +24,9 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isExplosiveShotActive = false;
     private float _canFire = -0.1f;
+    private int _missleAmmo = 0;
+    [SerializeField] private int _maxMissles = 3;
+   
     //Health and Shield related variables
     [SerializeField] private int _health = 100;
     [SerializeField] private GameObject _shieldVisualizer;
@@ -175,6 +179,12 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_explosiveShotPrefab, bulletPosition, transform.rotation);
             }
+            else if (_missleAmmo > 0)
+            {
+                _missleAmmo--;
+                GameObject missle = Instantiate(_misslePrefab, bulletPosition, Quaternion.identity);
+                missle.GetComponent<Laser>().SetHoming();
+            }
             else
             {
                 Instantiate(_bulletPrefab, bulletPosition, transform.rotation * transform.rotation);
@@ -324,5 +334,10 @@ public class Player : MonoBehaviour
         }
         _uiManager.UpdateHealth(_health);
         UpdateHealthIndicators(); 
+    }
+    
+    public void ActivateHomingMissle()
+    {
+        _missleAmmo = _maxMissles;
     }
 }

@@ -11,10 +11,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _scoreText;
     [SerializeField] private Text _ammoText;
     [SerializeField] private Text _gameOverText;
+    [SerializeField] private Text _waveText;
     [SerializeField] private GameObject _restartText;
     [SerializeField] private GameObject _gameOverDisplay;
     [SerializeField] private float _flickerInterval = 0.5f;
     private GameManager _gameManager;
+    private SpawnManager _spawnManager;
     private ProgressBar _healthBar;
     private ProgressBar _boostBar;
     // Start is called before the first frame update
@@ -27,12 +29,7 @@ public class UIManager : MonoBehaviour
         _healthBar.SetProgress(1); //Sets UI to show full health
 
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
     }
     
     public void UpdateScore(int score)
@@ -104,5 +101,32 @@ public class UIManager : MonoBehaviour
         _restartText.SetActive(true);
         StartCoroutine(GameOverFlickerRoutine());
         _gameManager.GameOver();
+    }
+
+    public void StartWave(int wave)
+    {
+        StartCoroutine(NextWaveRoutine(wave));
+    }
+
+    IEnumerator NextWaveRoutine(int wave)
+    {
+        if (_spawnManager != null)
+        {
+            _spawnManager.StopSpawning();
+            if (wave != 4)
+            {
+                   _waveText.text = "Wave " + wave.ToString();
+                yield return new WaitForSeconds(2f);
+                _spawnManager.StartSpawning();
+                _waveText.text = "";
+            }
+            else
+            {
+                _waveText.text = "Oh no...";
+                yield return new WaitForSeconds(2f);
+                _spawnManager.StartSpawning();
+                _waveText.text = "";
+            }
+        }
     }
 }

@@ -80,6 +80,9 @@ public class Powerup : MonoBehaviour
                         player.Damage();
                         GetComponent<Barrel>().Explode();
                         break;
+                    case 7:
+                        player.ActivateHomingMissle();
+                        break;
                     default:
                         Debug.LogError("Invalid Powerup ID");
                         break;

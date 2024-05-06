@@ -160,7 +160,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3654353829605793084}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3654353829605793084}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5398304bdbe56945a873c3d45f924da, type: 3}
   m_Name: 
@@ -265,14 +265,16 @@ MonoBehaviour:
   _maxSpeed: 8
   _roverBulletPrefab: {fileID: 4217047215022839819, guid: 98553c83e9035264ba7d5b769ddad8b0,
     type: 3}
-  _droneBulletPrefab: {fileID: 0}
+  _droneBulletPrefab: {fileID: 7288094618595504551, guid: 29b08e3c26ee49a4eb9947b8d10d3533,
+    type: 3}
   _explosionPrefab: {fileID: 5302844600416800790, guid: af3413d2855464945ac7e8b6067dbac5,
     type: 3}
   _minTimeInterval: 1
   _maxTimeInterval: 5
   _enemyId: 2
   rotationSpeed: 1
-  _shieldVisualizer: {fileID: 0}
+  _shieldVisualizer: {fileID: 6167877340967037995}
+  _specialFireTimeInterval: 1
   _ramSpeed: 1.25
 --- !u!1 &6167877340967037995
 GameObject:

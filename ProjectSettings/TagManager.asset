@@ -11,6 +11,7 @@ TagManager:
   - Explosive Bullet
   - Explosion
   - Powerup
+  - Boss
   layers:
   - Default
   - TransparentFX

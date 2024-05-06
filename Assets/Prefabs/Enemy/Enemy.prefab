@@ -273,6 +273,8 @@ MonoBehaviour:
   _enemyId: 0
   rotationSpeed: 1
   _shieldVisualizer: {fileID: 0}
+  _specialFireTimeInterval: 1
+  _ramSpeed: 1.25
 --- !u!1 &6167877340967037995
 GameObject:
   m_ObjectHideFlags: 0

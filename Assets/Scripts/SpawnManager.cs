@@ -10,19 +10,32 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float _minWaitForPowerup, _maxWaitForPowerup;
     [SerializeField] private GameObject[] _commonEnemies;
     [SerializeField] private GameObject[] _rareEnemies;
+    [SerializeField] private GameObject _bossPrefab;
     [SerializeField] private GameObject[] _commonPowerups;
     [SerializeField] private GameObject[] _rarePowerups;
 
+    private UIManager _uiManager;
     private bool _stopSpawning = false;
     private int _enemiesAlive = 3;
     private int _enemiesToSpawn = 3;
     private int _wave = 1;
     
     // Start is called before the first frame update
+
+    void Start()
+    {
+        _uiManager = GameObject.Find("UI").GetComponent<UIManager>();
+    }
     public void StartSpawning()
     {
+        _stopSpawning = false;
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
+    }
+
+    public void StopSpawning()
+    {
+        _stopSpawning = true;
     }
 
     IEnumerator SpawnEnemyRoutine()
@@ -92,13 +105,16 @@ public class SpawnManager : MonoBehaviour
                 case 3:
                     _enemiesAlive = 10;
                     break;
+                case 4:
+                    _enemiesAlive = 0;
+                    Instantiate(_bossPrefab, new Vector3(0, 9, 0), Quaternion.identity);
+                    break;
                 default:
                     _enemiesAlive = 0;
                     break;
             }
             _enemiesToSpawn = _enemiesAlive;
-            StartCoroutine(SpawnEnemyRoutine());
+            if (_uiManager != null) _uiManager.StartWave(_wave);
         }
-
     }
 }

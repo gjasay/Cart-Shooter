@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Barrel : MonoBehaviour
 {
-    [SerializeField]
-    private float _rotationSpeed;
-    [SerializeField]
-    private GameObject _explosionPrefab;
+    [SerializeField] private float _rotationSpeed;
+    [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private bool _isStartingBarrel;
 
     private SpawnManager _spawnManager;
+    private UIManager _uiManager;
+
     private void Start()
     {
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("UI").GetComponent<UIManager>();
     }
 
     // Update is called once per frame
@@ -32,7 +34,7 @@ public class Barrel : MonoBehaviour
             if (_explosionPrefab != null)
             {
                 Destroy(collision.gameObject);
-                _spawnManager.StartSpawning();
+                if (_uiManager != null && _isStartingBarrel) _uiManager.StartWave(1);
                 Explode();
             }
         }
