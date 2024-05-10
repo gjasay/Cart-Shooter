@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1806329266439311797}
   m_Layer: 0
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -267,5 +267,5 @@ MonoBehaviour:
   _shakeDuration: 0.2
   _shakeMagnitude: 0.35
   _redDuration: 0.25
-  _bulletSpeed: 10
+  _bulletSpeed: 6
   _secondsBetweenBullets: 1

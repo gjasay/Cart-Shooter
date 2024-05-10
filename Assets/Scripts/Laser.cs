@@ -5,6 +5,7 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     [SerializeField] private float _speed = 8.0f;
+    [SerializeField] private float _rotateSpeed = 200.0f;
 
     private bool _isEnemyBullet = false;
     private bool _isBossBullet = false;
@@ -55,11 +56,12 @@ public class Laser : MonoBehaviour
                 Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
                 // Rotate towards the enemy
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotateSpeed * Time.deltaTime);
                 transform.Translate(Vector3.up * _speed * Time.deltaTime);
             }
             else
             {
+                Debug.Log("Enemy is null");
                 transform.Translate(Vector3.up * _speed * Time.deltaTime);
 
                 if (transform.position.y > 8)
@@ -110,7 +112,7 @@ public class Laser : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
             // Rotate towards the enemy
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 180f * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotateSpeed * Time.deltaTime);
             transform.Translate(Vector3.up * _speed * Time.deltaTime);
         }
         else

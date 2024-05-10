@@ -12,9 +12,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _ammoText;
     [SerializeField] private Text _gameOverText;
     [SerializeField] private Text _waveText;
+    [SerializeField] private Text _winText;
+    [SerializeField] private GameObject _playAgainButton;
     [SerializeField] private GameObject _restartText;
     [SerializeField] private GameObject _gameOverDisplay;
     [SerializeField] private float _flickerInterval = 0.5f;
+
     private GameManager _gameManager;
     private SpawnManager _spawnManager;
     private ProgressBar _healthBar;
@@ -106,6 +109,17 @@ public class UIManager : MonoBehaviour
     public void StartWave(int wave)
     {
         StartCoroutine(NextWaveRoutine(wave));
+    }
+
+    public void OnWin()
+    {
+        _winText.text = "You Win!";
+        _playAgainButton.SetActive(true);
+    }
+
+    public void PlayAgain()
+    {
+        SceneManager.LoadScene(1);
     }
 
     IEnumerator NextWaveRoutine(int wave)

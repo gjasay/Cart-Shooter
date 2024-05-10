@@ -6,9 +6,11 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     //Movement related variables
-    [SerializeField] private float _speed = 3.5f;
+    [SerializeField] private float _defaultSpeed = 3.5f;
     [SerializeField] private float _speedBoostMultiplier = 2f;
     [SerializeField] private float _thrusterMultiplier = 1.5f;
+    [SerializeField] private float _wheelRotationMultiplier = 2.5f;
+    private float _speed = 3.5f;
     private bool _isThrusterEnabled = false;
     private float _boostCharge = 100f;
     private float _currentVelocity;
@@ -21,6 +23,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _tripleShotFireRate = 0.5f;
     [SerializeField] private float _bulletOffset = 1.5f;
     [SerializeField] private int _ammo = 15;
+    [SerializeField] private int _ammoToCollect = 20;
     private bool _isTripleShotActive = false;
     private bool _isExplosiveShotActive = false;
     private float _canFire = -0.1f;
@@ -105,21 +108,14 @@ public class Player : MonoBehaviour
         //Translate based on whether speed boost is active or not
         transform.Translate((_isSpeedBoostActive ? _speedBoostMultiplier * _speed : _speed) * Time.deltaTime * new Vector3(horizontalInput * 2.5f, verticalInput, 0));
 
-        // Restricts bound on Y Axis
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -5.8f, 4.5f), 0);
+        // Restricts bound on X and Y Axes
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -11.4f, 11.4f), Mathf.Clamp(transform.position.y, -5.8f, 4.5f), 0);
 
-        // Wrapping on the X axis
-        if (transform.position.x > 9.4f)
-        {
-            transform.position = new Vector3(-9.4f, transform.position.y, 0);
-        }
-        else if (transform.position.x < -9.4f)
-        {
-            transform.position = new Vector3(9.4f, transform.position.y, 0);
-        }
         //Handle Player Rotation
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.z, horizontalInput * -15, ref _currentVelocity, 0.25f);
         transform.rotation = Quaternion.Euler(0, 0, angle);
+        transform.GetChild(1).transform.rotation = Quaternion.Euler(0, 0, angle * _wheelRotationMultiplier); // Top right wheel
+        transform.GetChild(3).transform.rotation = Quaternion.Euler(0, 0, angle * _wheelRotationMultiplier); // Top left wheel
     }
 
     void ThrusterInput()
@@ -159,6 +155,7 @@ public class Player : MonoBehaviour
         {
             background.GetComponent<Background>().UpdateSpeed(_thrusterMultiplier, _isThrusterEnabled);
         }
+        _speed = _isThrusterEnabled ? _speed * _thrusterMultiplier : _defaultSpeed;
     }
 
     void FireBullet()
@@ -318,7 +315,7 @@ public class Player : MonoBehaviour
 
     public void CollectAmmo()
     {
-        _ammo += 10;
+        _ammo += _ammoToCollect;
         _uiManager.UpdateAmmoCount(_ammo);
     }
 

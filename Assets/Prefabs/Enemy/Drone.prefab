@@ -256,9 +256,12 @@ MonoBehaviour:
   _explosionPrefab: {fileID: 5302844600416800790, guid: af3413d2855464945ac7e8b6067dbac5,
     type: 3}
   _minTimeInterval: 1
-  _maxTimeInterval: 5
+  _maxTimeInterval: 3
   _enemyId: 1
   rotationSpeed: 0.75
+  _shieldVisualizer: {fileID: 0}
+  _specialFireTimeInterval: 1
+  _ramSpeed: 1.25
 --- !u!95 &7727136001967153073
 Animator:
   serializedVersion: 3

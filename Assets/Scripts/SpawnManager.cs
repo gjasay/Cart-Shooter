@@ -91,7 +91,7 @@ public class SpawnManager : MonoBehaviour
     public void OnEnemyDeath()
     {
         _enemiesAlive--;
-        if (_enemiesAlive <= 0)
+        if (_enemiesAlive <= 0 && _enemiesToSpawn == 0)
         {
             _wave++;
             switch (_wave)

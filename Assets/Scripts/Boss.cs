@@ -14,12 +14,14 @@ public class Boss : MonoBehaviour
     [SerializeField] private float _bulletSpeed = 10f;
     [SerializeField] private float _secondsBetweenBullets = 0.75f;
 
+    private UIManager _uiManager;
     private bool _isBossActive = false;
     private bool _isShootRoutineActive = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        _uiManager = GameObject.Find("UI").GetComponent<UIManager>();
         transform.position = new Vector3(0, 9, 0);
     }
 
@@ -75,6 +77,7 @@ public class Boss : MonoBehaviour
 
         if (_healthPoints <= 0)
         {
+            _uiManager.OnWin();
             Destroy(gameObject);
         }
         else
